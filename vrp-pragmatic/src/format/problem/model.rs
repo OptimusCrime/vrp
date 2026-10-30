@@ -59,6 +59,18 @@ pub struct JobSkills {
     pub none_of: Option<Vec<String>>,
 }
 
+/// Skills a job prefers its vehicle to have: a soft counterpart of [`JobSkills`]. Every unmet group of an
+/// assigned job counts one unit in the `minimize-unmet-preferred-skills` objective.
+#[derive(Clone, Deserialize, Debug, Serialize)]
+#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
+#[serde(rename_all = "camelCase")]
+pub struct JobPreferredSkills {
+    /// Vehicle should have at least one skill of every group. A flat list of skills is read as one group.
+    #[serde(default, deserialize_with = "deserialize_one_of", skip_serializing_if = "Option::is_none")]
+    #[cfg_attr(feature = "schema", schemars(with = "Option<JobSkillGroups>"))]
+    pub one_of: Option<Vec<Vec<String>>>,
+}
+
 /// Job skills `oneOf`: a list of skill groups, or a flat list of skills read as one group.
 #[derive(Deserialize)]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
@@ -170,6 +182,11 @@ pub struct Job {
     /// A job skills limitations for serving a job.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub skills: Option<JobSkills>,
+
+    /// Skills the job prefers its vehicle to have. Unlike skills, an unmet preference does not prevent an
+    /// assignment: it is minimized by the `minimize-unmet-preferred-skills` objective.
+    #[serde(skip_serializing_if = "Option::is_none", rename = "preferredSkills")]
+    pub preferred_skills: Option<JobPreferredSkills>,
 
     /// Job value, bigger value - more chances for assignment.
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -712,6 +729,10 @@ pub enum Objective {
     /// An objective to minimize site visits: distinct job sites summed over runs, so every run serving
     /// a site counts as one unit. Pushes riders of the same site into the same run.
     MinimizeSiteVisits,
+
+    /// An objective to minimize unmet job preferred skills: every `preferredSkills.oneOf` group of an assigned
+    /// job which its vehicle does not meet counts as one unit.
+    MinimizeUnmetPreferredSkills,
 
     /// An objective to minimize opposite-side arrivals: every leg along a matrix cell marked in
     /// `oppositeSideArrivals` counts as one unit.

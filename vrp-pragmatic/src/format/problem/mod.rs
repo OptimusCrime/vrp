@@ -110,6 +110,7 @@ pub(crate) struct ProblemProperties {
     pub(crate) has_configurable_capacity: bool,
     pub(crate) has_breaks: bool,
     pub(crate) has_skills: bool,
+    pub(crate) has_preferred_skills: bool,
     pub(crate) has_unreachable_locations: bool,
     pub(crate) has_reloads: bool,
     pub(crate) has_recharges: bool,

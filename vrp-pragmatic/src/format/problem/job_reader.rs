@@ -9,8 +9,9 @@ use std::sync::Arc;
 use vrp_core::{
     construction::features::{
         BreakPolicy, JobCompatibilityDimension, JobDemandDimension, JobGroupDimension, JobMaxRideDurationDimension,
-        JobRequestedTimesDimension, JobSiteDimension, JobSkills as FeatureJobSkills, JobSkillsDimension,
-        JobSoloRidingDimension, LifoGroupDimension, LifoGroupId, LifoTagDimension,
+        JobPreferredSkills as FeaturePreferredSkills, JobPreferredSkillsDimension, JobRequestedTimesDimension,
+        JobSiteDimension, JobSkills as FeatureJobSkills, JobSkillsDimension, JobSoloRidingDimension,
+        LifoGroupDimension, LifoGroupId, LifoTagDimension,
     },
     models::common::*,
     models::problem::{
@@ -673,6 +674,10 @@ fn fill_dimens(job: &ApiJob, dimens: &mut Dimensions) {
 
     if let Some(skills) = get_skills(&job.skills) {
         dimens.set_job_skills(skills);
+    }
+
+    if let Some(one_of) = job.preferred_skills.as_ref().and_then(|skills| skills.one_of.clone()) {
+        dimens.set_job_preferred_skills(FeaturePreferredSkills::new(one_of));
     }
 }
 

@@ -38,6 +38,9 @@ pub use self::locked_jobs::*;
 mod minimize_unassigned;
 pub use self::minimize_unassigned::*;
 
+mod preferred_skills;
+pub use self::preferred_skills::{JobPreferredSkills, JobPreferredSkillsDimension, create_preferred_skills_feature};
+
 mod reachable;
 pub use self::reachable::create_reachable_feature;
 

@@ -70,6 +70,7 @@ pub(crate) fn generate_plan(
                 replacements: generate_tasks(&job_proto.replacements, false),
                 services: generate_tasks(&job_proto.services, true),
                 skills: job_proto.skills.clone(),
+                preferred_skills: None,
                 value: job_proto.value,
                 group: job_proto.group.clone(),
                 compatibility: job_proto.compatibility.clone(),
