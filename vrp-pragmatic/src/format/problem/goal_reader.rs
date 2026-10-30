@@ -64,10 +64,6 @@ pub(super) fn create_goal_context(
         features.push(create_skills_feature("skills", SKILL_CONSTRAINT_CODE)?)
     }
 
-    if props.has_preferences {
-        features.push(create_preferences_feature("preferences", PreferencePenalty::default())?)
-    }
-
     if props.has_lifo {
         features.push(create_lifo_ordering_feature(LIFO_CONSTRAINT_CODE)?)
     }

@@ -9,7 +9,6 @@ pub fn create_empty_job() -> Job {
         replacements: None,
         services: None,
         skills: None,
-        preferences: None,
         value: None,
         group: None,
         compatibility: None,

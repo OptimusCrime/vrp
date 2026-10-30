@@ -79,36 +79,6 @@ where
     }))
 }
 
-/// Job preferences for vehicle attributes (soft constraint).
-///
-/// Unlike skills (which are hard requirements), preferences express desired vehicle attributes
-/// that the solver tries to match but can violate if necessary with a cost penalty.
-#[derive(Clone, Deserialize, Debug, Serialize)]
-#[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
-#[serde(rename_all = "camelCase")]
-pub struct JobPreferences {
-    /// List of preferred attributes. Penalty applied if NONE are present on the assigned vehicle.
-    /// Example: `["driver:alice", "driver:bob"]` means prefer Alice or Bob.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub preferred: Option<Vec<String>>,
-
-    /// List of acceptable attributes. Additional penalty if no preferred AND no acceptable match.
-    /// Used as fallback tier: "these are OK if preferred isn't available".
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub acceptable: Option<Vec<String>>,
-
-    /// List of attributes to avoid. Penalty applied for EACH attribute present.
-    /// Example: `["shift:night", "vehicle:old"]` means avoid night shift and old vehicles.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub avoid: Option<Vec<String>>,
-
-    /// Weight multiplier for preference penalties. Default is 1.0.
-    /// Higher values make this job's preferences more important.
-    /// Example: weight of 2.0 doubles the penalty for violating this job's preferences.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub weight: Option<Float>,
-}
-
 /// Specifies a place for sub job.
 #[derive(Clone, Deserialize, Debug, Serialize)]
 #[cfg_attr(feature = "schema", derive(schemars::JsonSchema))]
@@ -200,11 +170,6 @@ pub struct Job {
     /// A job skills limitations for serving a job.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub skills: Option<JobSkills>,
-
-    /// Job preferences for vehicle attributes (soft constraint).
-    /// Unlike skills, these are not hard requirements - they add cost penalties when not matched.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub preferences: Option<JobPreferences>,
 
     /// Job value, bigger value - more chances for assignment.
     #[serde(skip_serializing_if = "Option::is_none")]

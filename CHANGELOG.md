@@ -8,6 +8,14 @@ are already published. So, I stick to it for now.
 
 ## [Unreleased]
 
+### Removed
+
+* **Breaking:** job `preferences` (`preferred`, `acceptable`, `avoid`, `weight`) and, in core, `JobPreferences`,
+  `PreferencePenalty`, `VehicleAttributesDimension` and `create_preferences_feature`. The feature was never part of the
+  goal of optimization: the pragmatic reader added it as a feature but no objective layer used it, so preferences had
+  no effect on which vehicle served a job. Unknown job properties are ignored, so a `preferences` property is now
+  ignored as well; use `preferredSkills` with the `minimize-unmet-preferred-skills` objective instead.
+
 ## [1.43.0] 2026-10-22
 
 ### Added
